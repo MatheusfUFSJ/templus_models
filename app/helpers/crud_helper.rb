@@ -132,7 +132,8 @@ module CrudHelper
         opts = field[:sf].merge(label: I18n.t(field[:sf][:label], default: I18n.t("shared.#{field[:attribute]}")))
         unless modelo.reflect_on_association(field[:attribute])
           if modelo.new.send(field[:attribute]).class.to_s =~ /Uploader/ and f.object.send(field[:attribute]).present?
-            f.input field[:attribute], opts.merge(hint: "Arquivo Atual: #{f.object.send(field[:attribute]).file.filename}")
+          	current_hint = opts[:hint].present? ? "#{opts[:hint]} (Arquivo Atual: #{f.object.send(field[:attribute]).file.filename})" : "Arquivo Atual: #{f.object.send(field[:attribute]).file.filename}"
+            f.input field[:attribute], opts.merge(hint: current_hint)
           else
             f.input field[:attribute], opts
           end
@@ -151,7 +152,8 @@ module CrudHelper
       opts = field[:sf].merge(label: I18n.t(field[:sf][:label], default: I18n.t("shared.#{field[:attribute]}")))
       unless modelo.reflect_on_association(field[:attribute])
         if modelo.new.send(field[:attribute]).class.to_s =~ /Uploader/ and f.object.send(field[:attribute]).present?
-          f.input field[:attribute], opts.merge(hint: "Arquivo Atual: #{f.object.send(field[:attribute]).file.filename}")
+          current_hint = opts[:hint].present? ? "#{opts[:hint]} (Arquivo Atual: #{f.object.send(field[:attribute]).file.filename})" : "Arquivo Atual: #{f.object.send(field[:attribute]).file.filename}"
+          f.input field[:attribute], opts.merge(hint: current_hint)
         else
           f.input field[:attribute], opts
         end
