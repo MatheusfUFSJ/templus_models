@@ -3,7 +3,7 @@ class CrudController < ApplicationController
 
 
   def index
-    authorize! :read, @model_permission if respond_to?(:current_usuario)
+    authorize! :read, @model_permission if respond_to?(:current_user)
     if params[:scope].present? && valid_method?(params[:scope])
       @q = @model.send(params[:scope]).search(params[:q])
     else
@@ -16,7 +16,7 @@ class CrudController < ApplicationController
         @q.sorts = "#{@crud_helper.order_field} asc"
       end
     end
-    if respond_to?(:current_usuario)
+    if respond_to?(:current_user)
       @records = @q.result(distinct: true).includes(@crud_helper.includes).accessible_by(current_ability, :read).page(params[:page]).per(@crud_helper.per_page)
     else
       @records = @q.result(distinct: true).includes(@crud_helper.includes).page(params[:page]).per(@crud_helper.per_page)
@@ -37,23 +37,23 @@ class CrudController < ApplicationController
       @model_permission = @model
       @crud_helper = Module.const_get("#{@model}Crud".camelize)
     end
-    authorize! :new, @model_permission if respond_to?(:current_usuario)
+    authorize! :new, @model_permission if respond_to?(:current_user)
     @record = @model.new
   end
 
   def edit
     @record = @model.find(@id)
-    authorize! :edit, @record if respond_to?(:current_usuario)
+    authorize! :edit, @record if respond_to?(:current_user)
   end
 
   def show
     @record = @model.find(@id)
-    authorize! :read, @record if respond_to?(:current_usuario)
+    authorize! :read, @record if respond_to?(:current_user)
   end
 
   def action
     @record = @model.find(@id)
-    authorize! :create_or_update, @record if respond_to?(:current_usuario)
+    authorize! :create_or_update, @record if respond_to?(:current_user)
     if valid_instance_method?(params[:acao])
       if @record.send(params[:acao])
         flash.now[:success] = I18n.t("mensagem_action", acao: params[:acao])
@@ -72,11 +72,11 @@ class CrudController < ApplicationController
     @saved = false
     if @id
       @record = @model.find(@id)
-      authorize! :update, @record if respond_to?(:current_usuario)
+      authorize! :update, @record if respond_to?(:current_user)
       @saved = @record.update(params_permitt)
     else
       @record  =  @model.new(params_permitt)
-      authorize! :create, @model_permission if respond_to?(:current_usuario)
+      authorize! :create, @model_permission if respond_to?(:current_user)
       @saved = @record.save
     end
 
@@ -99,7 +99,7 @@ class CrudController < ApplicationController
 
   def destroy
     @record = @model.find(@id)
-    authorize! :destroy, @record if respond_to?(:current_usuario)
+    authorize! :destroy, @record if respond_to?(:current_user)
     if @record.destroy
       respond_to do |format|
         flash[:success] = I18n.t("destroyed", model: I18n.t("model.#{@model.name.underscore}"))
@@ -116,7 +116,7 @@ class CrudController < ApplicationController
   end
 
   def query
-    authorize! :read, @model_permission if respond_to?(:current_usuario)
+    authorize! :read, @model_permission if respond_to?(:current_user)
     @resource = @model
     if params[:scope].present? && valid_method?(params[:scope])
       @q = @model.send(params[:scope]).search(params[:q])
@@ -124,7 +124,7 @@ class CrudController < ApplicationController
       @q = @model.search(params[:q])
     end
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
-    if respond_to?(:current_usuario)
+    if respond_to?(:current_user)
       results = @q.result.accessible_by(current_ability).page(params[:page])
     else
       results = @q.result.page(params[:page])
@@ -139,12 +139,12 @@ class CrudController < ApplicationController
 
   def autocomplete
     @model = Module.const_get(params[:model].camelize)
-    authorize! :read, @model if respond_to?(:current_usuario)
+    authorize! :read, @model if respond_to?(:current_user)
     parametros = {}
     parametros["#{params[:campo]}_#{params[:tipo]}"] = params[:term]
     @q = @model.search(parametros)
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
-    if respond_to?(:current_usuario)
+    if respond_to?(:current_user)
       results = @q.result.accessible_by(current_ability).page(params[:page])
     else
       results = @q.result.page(params[:page])
@@ -158,7 +158,7 @@ class CrudController < ApplicationController
   end
 
   def listing
-    authorize! :read, @model_permission if respond_to?(:current_usuario)
+    authorize! :read, @model_permission if respond_to?(:current_user)
     if params[:scope].present? && valid_method?(params[:scope])
       @q = @model.send(params[:scope]).search(params[:q])
     else
@@ -171,7 +171,7 @@ class CrudController < ApplicationController
         @q.sorts = "#{@crud_helper.order_field} asc"
       end
     end
-    if respond_to?(:current_usuario)
+    if respond_to?(:current_user)
       @records = @q.result.accessible_by(current_ability)
     else
       @records = @q.result
@@ -194,7 +194,7 @@ class CrudController < ApplicationController
 
   def printing
     @record = @model.find(@id)
-    authorize! :read, @record if respond_to?(:current_usuario)
+    authorize! :read, @record if respond_to?(:current_user)
     report_name = "#{@record}_#{DateTime.now.strftime('%Y%m%d')}"
     respond_to do |format|
       format.pdf do
