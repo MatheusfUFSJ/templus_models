@@ -1,5 +1,5 @@
-<%= paginator.render do -%>
-	<div class="row">
+<%= paginator.render do %>
+	<nav class="row">
 		<div class="col-xs-12 col-md-4">
 			<div class="pagination pull-left">
 				<% if @options[:current_page].number < 2 %>
@@ -16,21 +16,21 @@
 			</div> 
 		</div>
 		<div class="col-xs-12 col-md-8">
-			<div class="dataTables_paginate paging_simple_numbers">
+			<nav class="">
 				<ul class="pagination">
 					<%= first_page_tag unless current_page.first? %>
 					<%= prev_page_tag unless current_page.first? %>
-					<% each_page do |page| -%>
+					<% each_page do |page| %>
 						<% if page.left_outer? || page.right_outer? || page.inside_window? -%>
 							<%= page_tag page %>
 						<% elsif !page.was_truncated? -%>
 							<%= gap_tag %>
-						<% end -%>
-					<% end -%>
+						<% end %>
+					<% end %>
 					<%= next_page_tag unless current_page.last? %>
 					<%= last_page_tag unless current_page.last? %>
 				</ul>
-			</div>
+			</nav>
 		</div>
-	</div>
-<% end -%>
+	</nav>
+<% end %>

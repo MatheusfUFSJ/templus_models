@@ -35,6 +35,8 @@
         <% end %>
       </tbody>
     </table>
-    <%= paginate @records, target: '#form', theme: 'templus'%>
+    <div class="col-xl-12 col-lg-12">
+      <%= paginate @records, target: '#form', theme: 'twitter-bootstrap-4', pagination_class: 'justify-content-center' %>
+    </div>
   </div>
 <% end %>

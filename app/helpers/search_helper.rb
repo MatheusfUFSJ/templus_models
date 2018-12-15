@@ -29,10 +29,12 @@ module SearchHelper
       label = I18n.t("simple_form.labels.#{modelo.name.underscore}.#{name}", default: I18n.t("shared.#{name}"))
       label = I18n.t(opts[:label], default: I18n.t("shared.#{name}")) if opts[:label]
 
-      @buffer << "<div class=\"form-group\">"
+      @buffer << "<div class=\"form-group row\">"
       @buffer << raro_label(label,opts)
       @buffer << "<div class='col-sm-10'>"
+      @buffer << "<div class='row'>"
       @buffer << raro_input(name, prototype.type, opts)
+      @buffer << "</div>"
       @buffer << "</div>"
       @buffer << "</div>"
     end
@@ -115,7 +117,7 @@ module SearchHelper
       input_class = opts[:input_html].try(:[], :class)
       collection.each do |e|
         buf << "<span class='checkbox' style='display: inline;'>"
-        buf << "<label for='vaga_filtro_vaga_attributes_perfil_executor' class='control-label'>"
+        buf << "<label for='vaga_filtro_vaga_attributes_perfil_executor' class='label-control'>"
         buf << "<input class='form-control check_boxes optional #{input_class}' type='checkbox' value='#{e[0]}' name='#{name}' style=''> #{e[1]}"
         buf << '</label>'
         buf << '</span>'
@@ -149,7 +151,7 @@ module SearchHelper
       if opts[:as] and opts[:as] == :hidden
         ""
       else
-      "<label class='col-sm-2 control-label'>#{name}</label>"
+      "<label class='col-sm-2 label-control'>#{name}</label>"
       end
     end
 
@@ -220,7 +222,7 @@ module SearchHelper
     def raro_date_range(name)
       "<div class='col-sm-6'>
       <div class=\"input-group date\">
-      <span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span>
+      <span class=\"input-group-addon\"><i class=\"ft-calendar\"></i></span>
       <input class=\"raro_date_range form-control\" type=\"text\"
              name=\"date-range_#{name}\"
              id='q_#{name}_range'
@@ -244,7 +246,7 @@ module SearchHelper
 
     def raro_before_form(model, partial, var, url, scope, sort)
       buffer = "<div id='search_box'>"+
-      "<form method='get' class=form-horizontal action='#{url}' data-push='partial' data-target='#form'>" +
+      "<form method='get' class='form-horizontal' action='#{url}' data-push='partial' data-target='#form'>" +
       "<input type='hidden' name='partial' value='#{partial}'>" +
       "<input type='hidden' name='var' value='#{var}'>"
       buffer << "<input type='hidden' name='q[s]' value='#{sort}'>" if sort.present?

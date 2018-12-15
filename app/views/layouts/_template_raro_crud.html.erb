@@ -1,36 +1,61 @@
-<%unless params[:render] == 'modal'%>
-	<div class="row wrapper border-bottom white-bg page-heading">
-		<div class="col-lg-3">
-			<h2>
-				<% if content_for? :header %>
-					<%= yield  :header %>
-				<% end %>
-			</h2>
-			<ol class="breadcrumb">
-				<li>
-					<%= link_to root_path do %>
-						<%= I18n.t("home") %>
-					<% end %>
-				</li>
-				<% if content_for? :breadcumb %>
-					<%= yield  :breadcumb %>
-				<% end %>
-			</ol>
-		</div>
-		<div class="col-lg-9">
-			<div class="pull-right">
-				<% unless @crud_helper.layout[1].present? and @crud_helper.layout[1].call() and @crud_helper.layout[0] == "escopo_lateral" %>
-					<% if content_for? :scopes %>
-						<%= yield  :scopes %>
-					<% end %>
-				<% end %>
-			</div>
-		</div>
-	</div>
+<% unless params[:render] == 'modal' %>
+  <div class="content-header row">
+    <div class="content-header-left col-md-4 col-12 mb-2">
+      <h3 class="content-header-title">
+        <% if content_for? :header %>
+          <%= yield :header %>
+        <% end %>
+      </h3>
+    </div>
+    <div class="content-header-right col-md-8 col-12">
+      <div class="breadcrumbs-top float-md-right">
+        <div class="breadcrumb-wrapper mr-1">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <%= link_to root_path do %>
+                Dashboard
+              <% end %>
+            </li>
+            <% if content_for? :breadcumb %>
+              <%= yield :breadcumb %>
+            <% end %>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
-<% if content_for? :corpo %>
-	<%= yield :corpo %>
-<% end %>
+<div class="content-body">
+  <section id="drag-area">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">
+              <% if content_for? :card_title %>
+                <%= yield :card_title %>
+              <% end %>
+            </h4>
+            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+            <div class="heading-elements">
+                <% if content_for? :extra_actions %>
+                  <%= yield :extra_actions %>
+                <% end %>
+            </div>
+          </div>
+
+          <div class="card-content collapse show">
+            <div class="card-body">
+              <% if content_for? :corpo %>
+                <%= yield :corpo %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 <% if content_for? :modal %>
-	<%= yield  :modal %>
+  <%= yield :modal %>
 <% end %>
