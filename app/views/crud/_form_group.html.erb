@@ -7,32 +7,35 @@
 	<% end %>
 <% end %>
 <%= f.simple_fields_for key do |g| %>
-	<div class="col-sm-12">
-		<h3><%= I18n.t(groups[:label]) %></h3>
-	</div>
-	<% groups[:fields].each do |field| %>
-		<% if field[:sf].present? && field[:sf][:grupo].present? %>
-			<%= render "/crud/form_group", f: g, key: field[:attribute], groups: field[:sf] %>
-		<% else %>
-			<% if modelo.reflect_on_association(field[:attribute]).try(:macro) == :belongs_to && is_raro_crud(modelo.reflect_on_association(field[:attribute]).class_name) && field[:sf][:add_registro].nil?%>
-					<%= render_plus_button(field,g,modelo,f.object) %>
-			<%else%>
-					<%= render_field(field,g,modelo,f.object) %>
-			<%end%>
-		<% end %>
-	<% end %>
-	<% if [:has_many,:has_and_belongs_to_many].include?(f.object.class.reflect_on_association(key).macro) %>
-		<div class="form-group">
-			<div class="col-sm-10 col-sm-offset-2">
-				<%= g.link_to_remove "Remover #{I18n.t(groups[:sublabel] || groups[:label])}" %>
-			</div>
+	<div class="row" style="margin-left: 0.0rem; margin-right: 0.0rem">
+		<div class="col-sm-12">
+			<h3><%= I18n.t(groups[:label]) %></h3>
 		</div>
-	<% end %>
+		<% groups[:fields].each do |field| %>
+			<% if field[:sf].present? && field[:sf][:grupo].present? %>
+				<%= render "/crud/form_group", f: g, key: field[:attribute], groups: field[:sf] %>
+			<% else %>
+				<% if modelo.reflect_on_association(field[:attribute]).try(:macro) == :belongs_to && is_raro_crud(modelo.reflect_on_association(field[:attribute]).class_name) && field[:sf][:add_registro].nil?%>
+						<%= render_plus_button(field,g,modelo,f.object) %>
+				<%else%>
+						<%= render_field(field,g,modelo,f.object) %>
+				<%end%>
+			<% end %>
+		<% end %>
+		<% if [:has_many,:has_and_belongs_to_many].include?(f.object.class.reflect_on_association(key).macro) %>
+			<div class="form-group row">
+				<div class="col-sm-2">
+					<%= g.link_to_remove "Remover", class: 'btn btn-sm btn-danger ml-1' %>
+				</div>
+			</div>
+		<% end %>
+	</div>
 <% end %>
+<div id="<%= key %>_attrs"></div>
 <% if [:has_many,:has_and_belongs_to_many].include?(f.object.class.reflect_on_association(key).macro) %>
 	<div class="form-group">
 		<div class="col-sm-12">
-			<%= f.link_to_add "Adicionar #{I18n.t(groups[:sublabel] || groups[:label])}", key %>
+			<%= f.link_to_add "Adicionar #{I18n.t(groups[:sublabel] || groups[:label])}", key, data: { target: "##{key}_attrs" }, class: 'btn btn-sm btn-success' %>
 		</div>
 	</div>
 <% end %>
