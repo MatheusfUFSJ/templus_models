@@ -140,7 +140,7 @@ SimpleForm.setup do |config|
   # Cache SimpleForm inputs discovery
   # config.cache_discovery = !Rails.env.development?
   
-  config.wrappers :default, class: :input, :tag => 'div', :class => 'col-sm-6', :error_class => 'has-danger' do |b|
+  config.wrappers :default, :tag => 'div', :class => 'col-sm-6', :error_class => 'has-danger' do |b|
     b.use :html5
     b.wrapper :tag => 'div', :class => 'form-group row' do |bab|
       bab.use :label, :class => 'col-md-3'
