@@ -511,11 +511,13 @@ class RaroCrud
     if @agrupamento.present?
       opts[:agrupamento] = @agrupamento
     end
-    @@form_fields[self.to_s.to_sym].push(
-      {
-        attribute: nome
-      }.merge({sf: opts})
-    )
+    unless @@form_fields[self.to_s.to_sym].any? { |v| v[:attribute] == nome }
+      @@form_fields[self.to_s.to_sym].push(
+        {
+          attribute: nome
+        }.merge({sf: opts})
+      )
+    end
     if opts.present? && opts[:autocomplete].present?
       campo_formulario(nome, {as: :hidden})
     end
