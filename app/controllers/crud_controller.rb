@@ -215,6 +215,7 @@ class CrudController < ApplicationController
   private
 
   def setup
+    params.require(:q).permit! if params[:q].present?
     params[:q] = convert_params(params[:q])
     if params[:associacao]
       @crud_associacao = Module.const_get("#{params[:model].to_s.singularize}_crud".camelize)
