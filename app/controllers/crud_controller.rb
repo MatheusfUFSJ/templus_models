@@ -125,9 +125,9 @@ class CrudController < ApplicationController
     end
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
     if respond_to?(:current_user)
-      results = @q.result.accessible_by(current_ability).page(params[:page])
+      results = @q.result.distinct.accessible_by(current_ability).page(params[:page])
     else
-      results = @q.result.page(params[:page])
+      results = @q.result.distinct.page(params[:page])
     end
     instance_variable_set("@#{params[:var]}", results)
     if request.respond_to?(:wiselinks_partial?) && request.wiselinks_partial?
@@ -160,9 +160,9 @@ class CrudController < ApplicationController
   def listing
     authorize! :read, @model_permission if respond_to?(:current_user)
     if params[:scope].present? && valid_method?(params[:scope])
-      @q = @model.send(params[:scope]).search(params[:q])
+      @q = @model.send(params[:scope]).search(params[:q]).distinct
     else
-      @q = @model.search(params[:q])
+      @q = @model.search(params[:q]).distinct
     end
     if @q.sorts.empty?
       if @crud_helper.order_field.to_s.include?("desc") || @crud_helper.order_field.to_s.include?("asc")
