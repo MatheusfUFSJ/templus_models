@@ -160,9 +160,9 @@ class CrudController < ApplicationController
   def listing
     authorize! :read, @model_permission if respond_to?(:current_user)
     if params[:scope].present? && valid_method?(params[:scope])
-      @q = @model.send(params[:scope]).search(params[:q]).distinct
+      @q = @model.send(params[:scope]).search(params[:q])
     else
-      @q = @model.search(params[:q]).distinct
+      @q = @model.search(params[:q])
     end
     if @q.sorts.empty?
       if @crud_helper.order_field.to_s.include?("desc") || @crud_helper.order_field.to_s.include?("asc")
@@ -172,9 +172,9 @@ class CrudController < ApplicationController
       end
     end
     if respond_to?(:current_user)
-      @records = @q.result.accessible_by(current_ability)
+      @records = @q.result.distinct.accessible_by(current_ability)
     else
-      @records = @q.result
+      @records = @q.result.distinct
     end
     report_name = "#{@crud_helper.title}_#{DateTime.now.strftime('%Y%m%d')}"
     respond_to do |format|
