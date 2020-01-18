@@ -83,7 +83,9 @@ class CrudController < ApplicationController
     respond_to do |format|
       if @saved
         flash[:success] = params[:id].present? ? I18n.t("updated", model: I18n.t("model.#{@model.name.underscore}")) : I18n.t("created", model: I18n.t("model.#{@model.name.underscore}"))
-        format.html { redirect_to crud_model_path(model: params[:model], id: @record.id ) }
+        format.html { redirect_to params[:associacao].present? ? 
+          crud_associacao_models_path(model: params[:model], id: params[:id], associacao: params[:associacao]) : 
+          crud_model_path(model: params[:model], id: @record.id ) }
         unless params[:render] == 'modal'
           format.js { render action: :index}
         else
